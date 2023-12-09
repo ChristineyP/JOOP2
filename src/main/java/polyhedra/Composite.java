@@ -31,19 +31,22 @@ public class Composite extends Polyhedron
         allPolyhedra = new Vector<Polyhedron>();
     }
 
-    /**
-     * Composite Copy Constructor.
-     *
-     * @param src source Composite object to copy
-     *
-     * @TODO complete this function
-     */
+    // /**
+    //  * Composite Copy Constructor.
+    //  *
+    //  * @param src source Composite object to copy
+    //  *
+    //  * @TODO complete this function
+    //  */
     public Composite(Composite src)
     {
         super("Composite");
-
         allPolyhedra = new Vector<Polyhedron>();
 
+        for (Polyhedron poly : src.allPolyhedra) {
+            this.allPolyhedra.add(poly.clone());
+        }
+        this.boundingBox = src.boundingBox.clone();
     }
 
     /**
@@ -55,7 +58,7 @@ public class Composite extends Polyhedron
      */
     public void add(Polyhedron toAdd)
     {
-
+        this.boundingBox.merge(boundingBox); 
     }
 
     /**
@@ -67,7 +70,14 @@ public class Composite extends Polyhedron
      */
     public void read(Scanner scanner)
     {
+        int numPolyhedra = scanner.nextInt();
 
+        for (int i = 0; i < numPolyhedra; i++) {
+            Polyhedron poly = PolyhedronFactory.createAndRead(scanner);
+            this.allPolyhedra.add(poly);
+            
+            this.boundingBox.merge(boundingBox);
+        }
     }
 
     /**
@@ -80,7 +90,11 @@ public class Composite extends Polyhedron
      */
     public void scale(double scalingFactor)
     {
+        for (Polyhedron poly : this.allPolyhedra) {
+            poly.scale(scalingFactor);
+        }
 
+        this.boundingBox.scale(scalingFactor);
     }
 
     /**
@@ -115,8 +129,21 @@ public class Composite extends Polyhedron
     @Override
     public String toString()
     {
+        StringBuilder bld = new StringBuilder();
 
-        return "Composite.toString not implemented";
+        bld.append(super.toString());
+        bld.append(this.size() + " polyhedra" + "\n");
+        //bld.append("%d polyhedra%n", this.size());
+
+        for (Polyhedron poly : this.allPolyhedra) {
+            //  use bld.append
+            //  use poly as argument
+            //  two leading spaces
+            //  end with newline
+            bld.append("  " + poly + "\n");
+        }
+
+        return bld.toString();
     }
 }
 

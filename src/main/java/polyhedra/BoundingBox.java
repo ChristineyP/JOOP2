@@ -136,4 +136,7 @@ public class BoundingBox implements Cloneable {
     {
         return this.upperRightVertex.toString();
     }
+
+    public void merge(Object other) {
+    }
 }
